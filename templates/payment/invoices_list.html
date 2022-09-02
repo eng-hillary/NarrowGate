@@ -1,0 +1,62 @@
+{% extends '../base/base.html' %}
+
+{% block title %}
+  Invoices
+{% endblock %}
+
+{% block content %}
+  <div class="row mt-5 d-flex justify-content-center">
+    <div class="col-4 bg-light py-2" style="height: 350px;">
+      <small class="text mb-2">type first name or last name to quicky find a student</small>
+      <form method="get">
+        {% comment %} {{ students.form.as_p }} {% endcomment %}
+
+        <button type="search" class="btn btn-success">Search</button>
+      </form>
+      <a href="{% url 'payment:invoice-create' %}" class="btn btn-success btn-sm w-100 mt-2 mb-2" role="button">New Invoice</a>
+    </div>
+    
+    <div class="col-8">
+      <div class="row px-2">
+        {% if invoices %}
+      <table class="table table-striped table-hover">
+        <thead class="bg-success">
+          <tr>
+            <th scope="col" class="text-light">Invoice Number</th>
+            <th scope="col" class="text-light">Title</th>
+            <th scope="col" class="text-light">Status</th>
+            <th scope="col" class="text-light">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+      {% for invoice in invoices %}
+      <tr>
+        <td>{{invoice.invoice_number}}</td>
+        <td>{{invoice.title}}</td>
+        <td>{{invoice.status}}</td>
+        <td>
+          <div class="col d-flex flex-row gx-1">
+            <a href="#" class="button mx-1" role="button">
+              <span data-feather="eye"></span>
+            </a>
+            <a href="{% url 'payment:payment-create' invoice.slug %}" class="button mx-1" role="button">
+              <span data-feather="edit"></span>
+            </a>
+            <a href="#" class="button mx-1" role="button">
+              <span data-feather="trash-2" style="color: red;"></span>
+            </a>
+          </div>
+          
+        </td>
+      </tr>
+        
+      {% endfor %}
+    </tbody>
+  </table>
+      {% else %}     
+       <strong>No results found</strong>
+{% endif %}
+
+      </div>
+      
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends '../base/base.html' %}
+
+{% block title %}
+  Payments
+{% endblock %}
+
+{% block content %}
+ <div class="row">
+    <div class="card col-sm-12 my-2 bg-transparent border shadow">
+        <div class="card-header bg-transparent">
+            <h6>Filter Payments</h6>
+        </div>
+        <div class="card-body">
+            <form method="get" class="form-inline">
+                <input type="text" class="form-input">  
+                <button type="search" class="btn btn-success">Search</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="col-sm-12">
+        <a href="{% url 'payment:search-student' %}" class="btn btn-success btn-sm w-20 mt-2 mb-2 float-end" role="button">NEW PAYMENT</a>
+        {% if payments %}
+        <table class="table table-striped border table-hover">
+          <thead class="bg-success">
+            <tr>
+              <th scope="col" class="text-light">Student</th>
+              <th scope="col" class="text-light">Fee</th>
+              <th scope="col" class="text-light">Amount</th>
+              <th scope="col" class="text-light">Method</th>
+              <th scope="col" class="text-light">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+        {% for payment in payments %}
+        <tr>
+          <td>{{payment.student}}</td>
+          <td>{{payment.fee}}</td>
+          <td>{{payment.amount}}</td>
+          <td>{{payment.mode}}</td>
+  
+          <td>
+            <div class="d-flex flex-row gx-1">
+              <a href="#" class="button mx-1" role="button">
+                <span data-feather="eye"></span>
+              </a>
+              <a href="#" class="button mx-1" role="button">
+                <span data-feather="edit"></span>
+              </a>
+              <a href="#" class="button mx-1" role="button">
+                <span data-feather="trash-2" style="color: red;"></span>
+              </a>
+            </div>
+            
+          </td>
+        </tr>
+          
+        {% endfor %}
+      </tbody>
+    </table>
+      {% else %}     
+   
+      <strong>No results found</strong>
+    {% endif %}     
+    </div>
+
+ </div>
+      
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends '../base/base.html' %}
+{% block title %}
+  New Student
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="card border-success my-5 p-0">
+      <div class="card-header bg-success text-white h5 fw-bold d-flex justify-content-center">Create Subject</div>
+      <div class="row p-2 g-0">
+        <div class="card-body">
+          <form class="row bg-light d-flex flex-row py-2 flex-wrap justify-content-center m-5" method="post" action="">
+            {% csrf_token %}
+            {% if form.errors %}
+              {% for field in form %}
+                {% for error in field.errors %}
+                  <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                  </div>
+                {% endfor %}
+              {% endfor %}
+              {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+                </div>
+              {% endfor %}
+            {% endif %}
+
+            <label class="small font-weight-bold">{{ form.code.label }}</label>
+            {{ form.code }}
+            <label class="small font-weight-bold">{{ form.name.label }}</label>
+            {{ form.name }}
+            <label class="small font-weight-bold">{{ form.class_taught.label }}</label>
+            {{ form.last_name }}
+            <label class="small font-weight-bold">{{ form.birth_date.label }}</label>
+            {{ form.class_taught }}
+
+            <button type="submit" class="btn btn-success w-50 my-2">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends '../base/base.html' %}
+{% block title %}
+  Update Student
+{% endblock %}
+
+{% block content %}
+    <div class="card bg-transparent mt-3 mb-3">
+        <div class="card-body">
+          <form class="row d-flex flex-row py-2 flex-wrap justify-content-center" method="post" action="">
+            {% csrf_token %}
+            {% if form.errors %}
+              {% for field in form %}
+                {% for error in field.errors %}
+                  <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                  </div>
+                {% endfor %}
+              {% endfor %}
+              {% for error in form.non_field_errors %}
+                <div class="alert alert-danger">
+                  <strong>{{ error|escape }}</strong>
+                </div>
+              {% endfor %}
+            {% endif %}
+            <div class="col-12 col-lg-6">
+              <h6 class="h6 mt-1">Student Information</h6>
+              <hr class="mb-3 bg-success" />
+              <label class="small font-weight-bold">{{ form.student_number.label }}</label>
+              {{ form.student_number }}
+              <label class="small font-weight-bold">{{ form.first_name.label }}</label>
+              {{ form.first_name }}
+              <label class="small font-weight-bold">{{ form.last_name.label }}</label>
+              {{ form.last_name }}
+              <label class="small font-weight-bold">{{ form.birth_date.label }}</label>
+              {{ form.birth_date }}
+              <label class="small font-weight-bold">{{ form.photo.label }}</label>
+              {{ form.photo }}
+              <label class="small font-weight-bold">{{ form.circumstances.label }}</label>
+              {{ form.circumstances }}
+              <label class="small font-weight-bold">{{ form.current_class.label }}</label>
+              {{ form.current_class }}
+              <label class="small font-weight-bold">{{ form.current_term.label }}</label>
+              {{ form.current_term }}
+              <label class="small font-weight-bold">{{ form.address.label }}</label>
+              {{ form.address }}
+              <label class="small font-weight-bold">{{ form.phone.label }}</label>
+              {{ form.phone }}
+            </div>
+            <div class="col-12 col-lg-6">
+              <h6 class="h6 mt-3">Guardian Information</h6>
+              <hr class="mb-3 bg-success" />
+              <label class="small font-weight-bold">{{ form.guardian_first.label }}</label>
+              {{ form.guardian_first }}
+              <label class="small font-weight-bold">{{ form.fguardian_last.label }}</label>
+              {{ form.guardian_last }}
+              <label class="small font-weight-bold">{{ form.relationship.label }}</label>
+              {{ form.relationship }}
+              <label class="small font-weight-bold">{{ form.guardian_occupation.label }}</label>
+              {{ form.guardian_occupation }}
+              <label class="small font-weight-bold">{{ form.guardian_phone.label }}</label>
+              {{ form.guardian_phone }}
+              <label class="small font-weight-bold">{{ form.guardian_email.label }}</label>
+              {{ form.guardian_email }}
+              <label class="small font-weight-bold">{{ form.guardian_address.label }}</label>
+              {{ form.guardian_address }}
+            </div>
+            <button type="submit" class="btn btn-success w-50 mt-2">Update</button>
+          </form>
+        </div>
+    </div>
+{% endblock %}

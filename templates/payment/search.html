@@ -1,0 +1,20 @@
+
+{% extends '../base/base.html' %}
+{% block title %}
+  Serach Student
+{% endblock %}
+
+{% block content %}
+<div class="card bg-transparent mt-3 mb-3">
+  <div class="card-body">
+    <form action="" method="post" class="form-inline">
+      {% csrf_token %}
+      {{form.student_number}}
+      {% comment %} <input class="form-control form-control-dark w-50 bg-light" type="text" placeholder="Student Number" aria-label="Search"> {% endcomment %}
+      <button type="submit" class="btn btn-success">Search</button>
+    </form>
+    
+  </div>
+</div>
+ 
+{% endblock %}

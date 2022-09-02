@@ -1,0 +1,18 @@
+{% extends '../base/base.html' %}
+{% block title %}
+  Delete Student
+{% endblock %}
+
+{% block content %}
+<div class="row mt-5">
+   <div class="col d-flex justify-content-center">
+    <form method="post">
+      {% csrf_token %}
+      <p>Are you sure you want to delete "{{ object }}"?</p>
+      <a href="{% url 'student:students-list' %}" role="button" class="btn btn-success">Cancel</a>
+      <input type="submit" value="Confirm" class="btn btn-danger" />
+    </form>
+   </div>
+</div>
+{% endblock %}
+

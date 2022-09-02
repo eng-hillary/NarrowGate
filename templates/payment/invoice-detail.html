@@ -1,0 +1,85 @@
+{% extends '../base/base.html' %}
+
+{% block title %}
+  Invoice Detail
+{% endblock %}
+
+{% block content %}
+  <div class="row mt-5 d-flex justify-content-center">
+    <div class="col-4 bg-light py-2">
+      <h6 class="h6">New payment</h6>
+        <hr class="mb-1" />
+      <form class="bg-light d-flex flex-row py-1 flex-wrap justify-content-center m-2" method="post" action="">
+        {% csrf_token %}
+        {% if form.errors %}
+          {% for field in form %}
+            {% for error in field.errors %}
+              <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+              </div>
+            {% endfor %}
+          {% endfor %}
+          {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+              <strong>{{ error|escape }}</strong>
+            </div>
+          {% endfor %}
+        {% endif %}
+       
+        <label class="small font-weight-bold">{{ form.fee.label }}</label>
+        {{ form.fee }}
+        <label class="small font-weight-bold">{{ form.mode.label }}</label>
+        {{ form.mode }}
+        <label class="small font-weight-bold">{{ form.term.label }}</label>
+        {{ form.term }}
+        <label class="small font-weight-bold">{{ form.amount.label }}</label>
+        {{ form.amount }} 
+        <button type="submit" class="btn btn-success w-100 my-2">Create</button>
+      </form>
+    </div>
+    
+    <div class="col-8">
+        <div class="row">
+            {% if payments %}
+            <table class="table table-striped table-hover mx-2">
+              <thead class="bg-success">
+                <tr>
+                  <th scope="col" class="text-light">Fee</th>
+                  <th scope="col" class="text-light">Mode</th>
+                  <th scope="col" class="text-light">Amount</th>
+                  <th scope="col" class="text-light">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+            {% for payment in payments %}
+            <tr>
+              <td>{{payment.fee}}</td>
+              <td>{{payment.mode}}</td>
+              <td>{{payment.amount}}</td>
+              <td>
+                <div class="col d-flex flex-row gx-1">
+                  <a href="#" class="button mx-1" role="button">
+                    <span data-feather="eye"></span>
+                  </a>
+                  <a href="#" class="button mx-1" role="button">
+                    <span data-feather="edit"></span>
+                  </a>
+                  <a href="#" class="button mx-1" role="button">
+                    <span data-feather="trash-2" style="color: red;"></span>
+                  </a>
+                </div>
+                
+              </td>
+            </tr>
+              
+            {% endfor %}
+          </tbody>
+        </table>
+            {% else %}     
+       
+        <strong>No results found</strong>
+          </div>
+      {% endif %}
+        </div>
+     
+{% endblock %}
