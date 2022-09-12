@@ -23,7 +23,7 @@ class Fee(models.Model):
         verbose_name_plural = 'Fees'
 
     def __str__(self):
-        return self.name
+        return '{} {}'.format(self.name, self.term)
 
 class Invoice(models.Model):
     STATUSES = (

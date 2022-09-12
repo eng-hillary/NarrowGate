@@ -1,23 +1,15 @@
 {% extends '../base/base.html' %}
-
 {% block title %}
-  Student
-{% endblock %}
+  Student Details
+{% endblock title %}
 
 {% block content %}
-  <div class="row mt-5 d-flex justify-content-center py-2 d-flex">
-    <div class="col-sm-12 col-lg-5 mb-3">
-      <div class="card shadow">
-        <div class="card-header bg-white h6 fw-bold">Student's Information</div>
-        <div class="row p-2 g-0">
-          <div class="col-md-3 d-flex align-items-center justify-content-center">
-            <img class="rounded-circle account-img" style="width:100px; height: 100px;" src="https://media.istockphoto.com/id/1275847596/es/foto/ni%C3%B1a-primaria-con-m%C3%A1scara-protectora-en-la-escuela.webp?s=612x612&w=is&k=20&c=l-bHuFK3PLvaI7zQlDZxHkVF7VNrOwLAPUHvNkyljbY=" alt="Student photo" />
-          </div>
-          <div class="col-md-8">
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-                  <p class="card-text">
+    <div class="card bg-transparent mt-3 mb-3">
+        <div class="row card-body d-flex justify-content-center">
+            <div class="col-sm-10 col-lg-6">
+                 <h6 class="h6 mt-1">Student Information</h6>
+                 <hr class="mb-3">
+                 <p class="card-text">
                     <i style="margin-right: 5px;">Student Number</i>
                     <b style="margin-left: 5px;">{{ student.student_number }}</b>
                   </p>
@@ -49,116 +41,49 @@
                     <i style="margin-right: 5px;">Home Phone</i>
                     <b style="margin-left: 5px;">{{ student.phone }}</b>
                   </p>
-                </div>
-              </div>
             </div>
-          </div>
-          <div class="card-footer mt-2 bg-transparent">
-            <a href="#" role="role" class="btn btn-success m-1">DETAILS</a>
-            <a href="{% url 'student:student-update' student.id %}" role="role" class="btn btn-success m-1">UPDATE</a>
-            <a href="{% url 'student:student-delete' student.id %}" role="role" class="btn btn-danger m-1">DELETE</a>
-          </div>
+             
+            <hr class="mb-3 mt-3 bg-success d-lg-none" />
+
+            <div class="col-sm-10 col-lg-6">
+                <h6 class="h6 mt-1">Guardian Information</h6>
+                <hr class="mb-3">
+
+                  <p class="card-text">
+                    <i style="margin-right: 5px;">First Name</i>
+                    <b style="margin-left: 5px;">{{ student.guardian_first }}</b>
+                  </p>
+                  <p class="card-text">
+                    <i style="margin-right: 5px;">Last Name</i>
+                    <b style="margin-left: 5px;">{{ student.guardian_last }}</b>
+                  </p>
+                  <p class="card-text">
+                    <i style="margin-right: 5px;">Relationship</i>
+                    <b style="margin-left: 5px;">{{ student.relationship }}</b>
+                  </p>
+                  <p class="card-text">
+                    <i style="margin-right: 5px;">Occupation</i>
+                    <b style="margin-left: 5px;">{{ student.guardian_occupation }}</b>
+                  </p>
+                  <p class="card-text">
+                    <i style="margin-right: 5px;">Telephone</i>
+                    <b style="margin-left: 5px;">{{ student.guardian_phone }}</b>
+                  </p>
+                  <p class="card-text">
+                    <i style="margin-right: 5px;">Email</i>
+                    <b style="margin-left: 5px;">{{  student.guardian_email }}</b>
+                  </p>
+                  <p class="card-text">
+                    <i style="margin-right: 5px;">Address</i>
+                    <b style="margin-left: 5px;">{{ student.guardian_address }}</b>
+                  </p>
+            </div>
+          
         </div>
-      </div>
+        <div class="card-footer d-flex justify-content-center bg-transparent">
+            <a href="{% url 'student:student-delete' student.id %}" role="button" class="btn btn-danger mx-1">DELETE</a>
+            <a href="{% url 'student:student-update' student.id %}" role="button" class="btn btn-success mx-1">UPDATE</a>
+
+        </div>
     </div>
-    <div class="col-sm-12 col-lg-6">
-      <div class="row">
-
-       {% if payments %}
-       <div class="col mx-3">
-        <div class="card shadow">
-          <div class="card-header bg-transparent">
-            <h6>Payments</h6>
-          </div>
-          <div class="card-body">
-            <table class="table table-striped border table-hover">
-              <thead class="bg-success">
-                <tr>
-                  <th scope="col" class="text-light">Fee</th>
-                  <th scope="col" class="text-light">Paid</th>
-                  <th scope="col" class="text-light">Dues</th>
-                 
-                </tr>
-              </thead>
-              <tbody>
-                {% for payment in payments %}
-                <tr>
-                  <td>{{payment.fee}}</td>
-                  <td>{{payment.mode}}</td>
-                  <td>{{payment.amount}}</td>
-                </tr>
-                {% endfor %}
-            
-           
-          </tbody>
-        </table>
-          </div>
-          <div class="card-footer bg-transparent">
-            <a href="#" role="button" class="btn btn-success m-1">VIEW PAYMENTS</a>
-            <button href="#addProductModal" type="button" class="btn btn-success m-1" data-bs-toggle="modal"> ADD PAYMENT </button>
-          </div>
-        </div>
-      </div>
-       {% endif %}
-
-        <div class="col mx-3 mt-3">
-          <div class="card shadow">
-            <div class="card-header bg-transparent">
-              <h6>Results</h6>
-            </div>
-            <div class="card-body">
-              <table class="table table-striped border table-hover">
-                <thead class="bg-success">
-                  <tr>
-                    <th scope="col" class="text-light">Subject</th>
-                    <th scope="col" class="text-light">Type</th>
-                    <th scope="col" class="text-light">Score</th>
-                   
-                  </tr>
-                </thead>
-                <tbody>
-              
-              <tr>
-                <td>Math</td>
-                <td>BOT</td>
-                <td>75</td>
-              </tr>
-            </tbody>
-          </table>
-            </div>
-            <div class="card-footer bg-transparent">
-              <a href="#" role="button" class="btn btn-success m-1">VIEW MARKS</a>
-              <a href="#" role="button" class="btn btn-success m-1">ADD MARKS</a>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <!--payment modal starts here-->
-  <div class="modal modal-sheet py-5" tabindex="-1" id="addProductModal">
-    <div class="modal-dialog">
-      <div class="modal-content rounded-6 shadow">
-
-        <form class="" action="#" method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-
-        <div class="modal-header border-bottom-0">
-          <h5 class="modal-title">Add Payment</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-        <div class="modal-body py-0">
-          {{payment_form.as_p}}
-        </div>
-        <div class="modal-footer flex-column border-top-0">
-          <button type="submit" class="btn btn-lg btn-success w-50 mx-0 mb-2">Save</button>
-        </div>
-
-        </form>
-      </div>
-    </div>
-  </div>
-{% endblock %}
+{% endblock content%}

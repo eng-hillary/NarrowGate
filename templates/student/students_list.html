@@ -6,24 +6,31 @@
 
 {% block content %}
   <div class="row mt-5 d-flex justify-content-center">
-    <div class="col-12 col-lg-3 my-3 border shadow py-3">
+    {% comment %} <div class="col-12 col-lg-3 my-3 border shadow py-3">
       <form class="form" method="get">
         {{ students.form.as_p }}
         <button type="search" class="btn btn-success w-100 mb-2">Search</button>
       </form>
       
     </div>
-    
-    <div class="col-12 col-lg-8">
-      <a href="{% url 'student:student-create' %}" class="btn btn-success btn-sm w-50 mt-2 mb-2 float-end" role="button">New Student</a>
-      {% if students.qs %}
+     {% endcomment %}
+    <div class="col-12 col-lg-12 shadow">
+      <div class="col-sm-6 col-lg-12">
+        <form class="form" method="get">
+          {{ students.form.as_table }}
+          <button type="search" class="btn btn-success mb-2">Search</button>
+        </form>
+      </div>
+      <div class="col">
+      <a href="{% url 'student:student-create' %}" class="btn btn-success btn-sm mt-2 mb-2 float-end" role="button">NEW STUDENT</a>
+        {% if students.qs %}
       <table class="table table-striped border table-hover">
         <thead class="bg-success">
           <tr>
             <th scope="col" class="text-light">First Name</th>
             <th scope="col" class="text-light">Last Name</th>
             <th scope="col" class="text-light">Class</th>
-            <th scope="col" class="text-light">Actions</th>
+            <th scope="col" class="text-light">Option</th>
           </tr>
         </thead>
         <tbody>
@@ -31,11 +38,11 @@
       <tr>
         <td>{{student.first_name}}</td>
         <td>{{student.last_name}}</td>
-        <td>{{student.stream}}</td>
+        <td>{{student.current_class}}</td>
 
         <td>
           <div class="d-flex flex-row gx-1">
-            <a href="{% url 'student:student-detail' student.id %}" class="button mx-1" role="button">
+            <a href="{% url 'student:student-profile' student.id %}" class="button mx-1" role="button">
               <span data-feather="eye"></span>
             </a>
             <a href="{% url 'student:student-update' student.id %}" class="button mx-1" role="button">
@@ -50,12 +57,15 @@
       </tr>
         
       {% endfor %}
-    </tbody>
-  </table>
+     </tbody>
+    </table>
     {% else %}     
  
     <strong>No results found</strong>
-  {% endif %}     
+    {% endif %}  
+      </div>
+  
+         
   </div>
      
 {% endblock %}

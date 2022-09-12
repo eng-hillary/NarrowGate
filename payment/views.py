@@ -1,4 +1,5 @@
 from ast import For
+from email.feedparser import FeedParser
 from multiprocessing import get_context
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -15,7 +16,7 @@ from django.views.generic import (
 from django.views.generic.edit import UpdateView
 from bootstrap_modal_forms.generic import BSModalCreateView
 from student.models import Student
-from . models import Invoice, Payment
+from . models import Invoice, Payment, Arear
 from . forms import (
     InvoiceForm,
     FeeForm,
@@ -31,19 +32,77 @@ class PaymentsView(LoginRequiredMixin, TemplateView):
         return render(request, self.template_name, {'payments':payments})
 
 class PayementSearchView(LoginRequiredMixin, FormView):
-    form_class =  SearchForm
+    # form_class =  SearchForm
     template_name = 'payment/search.html'
 
+    def get(self, request, *args, **kwargs):
+        form = SearchForm()
+
+        return render(request, self.template_name, {'form':form})
+
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+        form = SearchForm(request.POST)  
         if form.is_valid():
             student_number = form.cleaned_data['student_number']
-            student = Student.objects.get(student_number=student_number)
-            return render(request, 'payment/make_payment.html', {'student':student})
-        return render(request, self.template_name, {'form': self.form_class})
+            try:
+                student=Student.objects.get(student_number=student_number)
+               
+                # return render(request, 'payment/make_payment.html', {'student':student})
+                return redirect('payment:payment-create')
+            except:
+                return render(request, self.template_name, {
+                    'form': form,
+                    'error': 'No student with that student number'}
+                    )            
 
     def form_valid(self, form):
         return super().form_valid(form)
+
+
+class PaymentCreateView(LoginRequiredMixin,CreateView):
+    model = Payment
+    form_class =  PaymentForm
+    template_name = 'payment/payment_create.html'
+ 
+
+    def get(self, request, *args, **kwargs):
+        student = Student.objects.get(student_number=kwargs['student_number'])
+        # student_arears = Arear.objects.filter(student=student)   
+        form = self.form_class()
+        # form.fields["fee"].queryset = student_arears
+        # print("arears list", student_arears)
+        return render(request, self.template_name, {'form':form})
+
+    def post(self, request, *args, **kwargs):
+        student = Student.objects.get(student_number=kwargs['student_number'])
+        form = self.form_class(request.POST)
+        
+
+        if form.is_valid():
+            #getting the type of the fee being paid
+            fee = form.cleaned_data['fee']
+            amount= form.cleaned_data['amount']
+            student = Student.objects.get(student_number=kwargs['student_number'])
+
+            try:
+                #getting student's arears being paid for
+                arear = Arear.objects.get(student=student, fee=fee)
+                #update the pending balance
+                current_balance = arear.pending_balance
+                new_balance = current_balance - amount 
+                form.save()
+                arear.pending_balance = new_balance 
+                arear.save()
+                return redirect('student:student-detail', pk=student.pk)
+
+            except:
+                return render(request, self.template_name, {'form':form, 'error': 'this studend does not have such areas'})
+
+            
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+
 
 class InvoiceListView(LoginRequiredMixin, ListView):
     model = Invoice
@@ -71,33 +130,6 @@ class InvoiceUpdateView(LoginRequiredMixin, UpdateView):
 class PaymentListView(LoginRequiredMixin, ListView):
     model = Payment
     template_name = 'payment/invoice_u'
-
-
-class PaymentCreateView(LoginRequiredMixin, CreateView):
-    model = Payment
-    form_class = PaymentForm
-    template_name = 'student/student_detail.html'
-
-    def get(self, request, *args, **kwargs):
-
-        form = self.form_class()
-        context = {}
-        context['payment_form'] = form
-        context['data'] = "some data passed in from the view"
-        return render(request, self.template_name,context)
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        context = {}
-        context['payment_form'] = form   
-        return render(request, self.template_name, context)
-
-
-# class PaymentCreateView(BSModalCreateView):
-#     template_name = 'payment/create_payment.html'
-#     form_class = PaymentModelForm
-#     success_message = 'Success: Payment was created.'
-#     success_url = reverse_lazy('payment:invoice-detail')
 
 
 class InvoiceDetailView(LoginRequiredMixin, DetailView):

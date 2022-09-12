@@ -15,7 +15,7 @@ from django.urls import reverse_lazy
 from . filters import StudentFilter
 from bootstrap_datepicker_plus.widgets import DatePickerInput
 
-from payment.models import Payment
+from payment.models import Payment, Arear
 from payment.forms import PaymentForm
 
 class StudentListView(LoginRequiredMixin, TemplateView):
@@ -26,36 +26,6 @@ class StudentListView(LoginRequiredMixin, TemplateView):
     def get(self, request):
         students = StudentFilter(request.GET, queryset=Student.objects.all())
         return render(request, 'student/students_list.html', {'students': students})
-
-
-class StudentDetailView(LoginRequiredMixin,View):
-    model = Payment
-    # context_object_name = 'student'
-    template_name = 'student/student_detail.html'
-
-    def get(self, request, *args, **kwargs):
-
-        context = {}
-        form = PaymentForm()
-        student = Student.objects.get(id=kwargs['pk'])
-        payments = Payment.objects.filter(student=student)
-        print("payments-->", payments)
-        context['payment_form'] = form
-        context['student'] = student
-        context['payments'] = payments
-        return render(request, self.template_name,context)
-
-    def post(self, request, *args, **kwargs):
-        context = {}
-        form = PaymentForm(request.POST)
-        student = Student.objects.get(id=kwargs['pk'])
-        if form.is_valid():
-            payment = form.save(commit=False)
-            payment.student = student
-            payment.save()
-            return redirect(request.path_info)
-        context['payment_form'] = form   
-        return render(request, self.template_name, context)
 
 
 class StudentCreateView(LoginRequiredMixin, CreateView):
@@ -71,6 +41,13 @@ class StudentCreateView(LoginRequiredMixin, CreateView):
         form = super().get_form()
         form.fields['birth_date'].widget = DatePickerInput()
         return form
+
+class StudentDetailView(LoginRequiredMixin, DetailView):
+    model = Student
+    template_name = 'student/student_detail.html'
+    context_object_name = 'student'
+
+    
 
 class StudentDeleteView(LoginRequiredMixin, DeleteView):
     model = Student
@@ -88,4 +65,43 @@ class StudentUpdateView(LoginRequiredMixin, UpdateView):
     # success_url = reverse_lazy('student:students-list')
 
 
-   
+class StudentProfileView(LoginRequiredMixin,View):
+    model = Payment
+    # context_object_name = 'student'
+    template_name = 'student/student_profile.html'
+
+    def get(self, request, *args, **kwargs):
+
+        context = {}
+        student = Student.objects.get(id=kwargs['pk'])
+        form = PaymentForm()
+        arears = Arear.objects.filter(student=student)
+        context['payment_form'] = form
+        context['student'] = student
+        context['arears'] = arears
+        return render(request, self.template_name,context)
+
+    def post(self, request, *args, **kwargs):
+        context = {}
+        form = PaymentForm(request.POST)
+        student = Student.objects.get(id=kwargs['pk'])
+        if form.is_valid():
+            payment = form.save(commit=False)
+            payment.student = student
+            payment.save()
+            return redirect(request.path_info)
+        context['payment_form'] = form   
+        return render(request, self.template_name, context)
+
+
+class StudentPayment(LoginRequiredMixin, View):
+    pass
+
+
+class StudentAcademic(LoginRequiredMixin, View):
+    pass
+
+
+
+
+
